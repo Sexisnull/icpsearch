@@ -6,6 +6,7 @@ import random
 import urllib3
 urllib3.disable_warnings()
 
+# china数据很不准确，建议慎用
 
 def beianx(company_name):
     datas = []
@@ -25,7 +26,7 @@ def beianx(company_name):
             permit = t.find_all('td')[3].get_text().strip()
             domain = t.find_all('td')[5].get_text().strip()
             data['permit'] = permit
-            data['domain'] = domain
+            data['domain'] = '.'.join(domain.split('.')[1:])
             datas.append(data)
 
     print(company_name + "备案数量为" + str(len(datas)))
@@ -51,14 +52,14 @@ def chinaz(company_name):
         for d in data['data']:
             ld = {}
             ld['permit'] = d['permit']
-            ld['host'] = d['host']
+            ld['domain'] = d['host']
             datas.append(ld)
 
     print(company_name + "的备案数量为" + str(len(datas)))
     if datas:
         for d in datas:
             print("备案号：" + d['permit'])
-            print("备案域名：" + d['host'])
+            print("备案域名：" + d['domain'])
 
     return datas
 
